@@ -1,0 +1,79 @@
+/* Validation Form: VF */
+:root {
+    --primary: #000; 
+    --secondary: #8888;
+    --text-primary: #ffff;
+    --text-secondary: #fff9;
+    --accent: #59a;
+    --sec-accent: #05a;
+    --error: #920;
+    --success: #4909;
+    --warning: #990;
+}
+
+body {
+    background: var(--primary);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    color: var(--text-primary);
+    height: auto;
+    width: auto;
+}
+
+a {
+    text-decoration: none;
+    color: var(--warning);
+}
+
+p {
+    color: var(--text-secondary);
+}
+
+h1, h2 {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text-primary);
+}
+
+button {
+    background: var(--accent);
+    color: var(--primary);
+    border: 3px solid white;
+    border-radius: 15px;
+    padding: 7px;
+}
+
+input {
+    background: var(--sec-accent);
+    border: 3px dotted white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+input::placeholder {
+    opacity: 1;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-content__heading {
+    text-align: center;
+}
+
+.form-content__form {
+    display: flex;
+    flex-direction: column;
+    max-width: 250px;
+    width: 100%;
+}

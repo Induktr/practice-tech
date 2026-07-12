@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>SNW - Socratic Node Wrapper</title>
+</head>
+<body class="page-layout">
+    <div class="page-layout__bg-mars">
+        <img
+          class="bg-mars__img"
+          src="./src/shared/assets/images/snw/dark/bg/bg_mars_dark.png"
+        >
+    </div>
+    <header class="page-layout__header">
+        <div class="header__logo">
+            <div class="logo__symbol">
+                <h2>S</h2>
+            </div>
+            <div>
+                <h2 class="logo__h">SOCRATIC NODE WRAPPER</h2>
+                <p class="logo_p">v27.1 | Mars Colony Edition</p>
+            </div>
+        </div>
+        <div class="header__btn">
+            <button
+                class="btn__theme"
+            >
+                MARS RED
+            </button>
+            <button>CU: NIKITA</button>
+            <button class="btn__audio">AUDIO: OFF</button>
+            <button class="btn__settings">SETTINGS</button>
+        </div>
+    </header>
+    <main class="report">
+        <section>
+            <h2>SYSTEM STATUS</h2>
+            <hr>
+            <article>
+                <p>TSD_LEVEL</p>
+                <p>27.1</p>
+            </article>
+            <article>
+                <p>NODES_ACTIVE</p>
+                <p class="nodes-active-count">0</p>
+            </article>
+            <article>
+                <p>SIGNAL_STRENGTH</p>
+                <p class="signal-strength-present">0%</p>
+            </article>
+            <hr>
+            <p>MISSION: ACTIVE</p>
+        </section>
+    </main>
+    <form class="page-layout__field-concept">
+        <div class="field-concept__arrow">
+            <span>&gt;&gt;</span>
+        </div>
+        <label
+            for="create-new"
+            class="field-concept__label"
+        >
+            <input
+                type="text"
+                id="create-new"
+                class="data-text"
+                placeholder="Enter Socratic query or create new node..."
+            >
+            TIP: Use Socratic methodology to deconstruct complex problems
+        </label>
+        <button>TRANSMIT</button>
+    </form>
+    <script>
+        const SCALE_STEP = 0.1;
+        const MIN_SCALE = 0.5;
+        const MAX_SCALE = 2.0;
+        const CARD_SIZE = 200;
+        
+        const nodes = [];
+        const QUESTIONS = [
+            { id: 1, question: "1. Что это такое?"},
+            { id: 2, question: "2. \"Три Ключевых Слова\": Если бы мне нужно было описать эту концепцию всего **тремя словами**, какие бы я выбрал?"},
+            { id: 3, question: "3. Из каких частей состоит?"},
+            { id: 4, question: "4. Как эти части взаимодействуют с друг другом?"},
+            { id: 5, question: "5. Определить точку зрения"},
+            { id: 6, question: "6. В чём цель?"},
+            { id: 7, question: "7. В чём миссия?"},
+            { id: 8, question: "8. Пример из аналогии"},
+        ];
+
+        const avatarProfile = "./src/shared/assets/images/avatar-brand.jpg";
+
+        const user = {
+            id: 1,
+            name: "Induktr",
+            email: "qwerty@gmai.com",
+            password: "qwerty1234",
+            avatars: ["./src/shared/assets/images/avatar-brand.jpg"],
+            updatedAt: Date.now()
+        };
+
+        let CURRENT_SCALE = 1.0;
+        let currentQuestionIndex = 0;
+        let currentNodeIndex = 0;
+        let activeParentId = null;
+        let activeGroupId = null;
+        let delayAnimation = 10000;
+        let isActiveNode = false;
+        
+        function toggleTheme(nodeA, nodeB, attr) {
+            const root = document.documentElement;
+            const current = root.getAttribute("data-theme");
+            const isTheme = current === "dark" ? (nodeA.textContent = "MARS BROWN") && "light" : (nodeA.textContent = "MARS RED") && "dark";
+            
+            root.setAttribute("data-theme", isTheme);
+            nodeB.setAttribute(attr, current === "dark" ? "./src/shared/assets/images/snw/light/bg/bg_mars_light.png" : "./src/shared/assets/images/snw/dark/bg/bg_mars_dark.png");
+        };
+
+        function audioManager(
+            src,
+            isPlaying = false,
+            volume = 0.1,
+            node
+        ) {
+            const audio = new Audio(src);
+
+            node.prepend(audio);
+
+            isPlaying === true ? audio.play() : (node.textContent = "AUDIO: OFF") && audio.pause();
+
+            audio.volume === 0 ? audio.volume + volume : audio.volume; 
+        };
+
+        function updateNodesCounter() {
+            const counterEl = document.querySelector(".nodes-active-count");
+            const strengthCount = document.querySelector(".signal-strength-present");
+
+            let nodesCount = nodes.length;
+            if (counterEl || strengthCount) {
+                counterEl.textContent = nodesCount;
+
+                strengthCount.textContent = `${nodesCount * 10}%`;
+            };
+        };
+
+        function checkAllCollisions() {
+            for(let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const one = nodes[i];
+                    const two = nodes[j];
+
+                    const r1 = 100;
+                    const r2 = 100;
+                    
+                    const left1 = Number.parseFloat(one.element.style.left) || one.element.offsetLeft;
+                    const top1 = Number.parseFloat(one.element.style.top) || one.element.offsetTop;
+                    const left2 = Number.parseFloat(two.style.left) || two.offsetLeft;
+                    const top2 = Number.parseFloat(two.style.top) || two.offsetTop;
+
+                    const x1 = left1 + r1;
+                    const y1 = top1 + r1;
+                    const x2 = left2 + r2;
+                    const y2 = top2 + r2;
+
+                    const dx = x2 - x1;
+                    const dy = y2 - y1;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    const minDistance = r1 + r2;
+
+                    if(distance < minDistance) {
+                        const overlap = minDistance - distance / 2;
+                        const safeDistance = distance === 0 ? 1 : distance;
+
+                        const ux = dx / safeDistance;
+                        const uy = dy / safeDistance;
+
+                        const newX1 = left1 - (ux * overlap / 2);
+                        const newY1 = top1 - (uy * overlap / 2);
+                        const newX2 = left2 + (ux * overlap / 2);
+                        const newY2 = top2 + (uy * overlap / 2);
+
+                        one.element.style.transition = "200ms";
+                        two.style.transition = "200ms";
+
+                        one.element.style.left = `${newX1}px`;
+                        one.element.style.top = `${newY1}px`;
+                        two.style.left = `${newX2}px`;
+                        two.style.top = `${newY2}px`;
+                    };
+                };
+            };
+        };
+
+        function moveCamera(node) {
+            window.addEventListener("keydown", (e) => {
+                if(e.key === "ArrowDown") {
+                    node.style.top = `${node.offsetTop + 50}px`;
+                } else if (e.key === "ArrowUp") {
+                    node.style.top = `${node.offsetTop - 50}px`;
+                } else if (e.key === "ArrowLeft") {
+                    node.style.left = `${node.offsetLeft - 50}px`;
+                } else if (e.key === "ArrowRight") {
+                    node.style.left = `${node.offsetLeft + 50}px`;
+                };
+            }, { passive: false, capture: false });
+        };
+
+        function applyCanvasScale(node) {
+            window.addEventListener("keydown", (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === "+" || e.key === "=") {
+                        e.preventDefault();
+                        
+                        CURRENT_SCALE = Math.min(MAX_SCALE, CURRENT_SCALE + SCALE_STEP);
+                    } else if(e.key === "-") {
+                        e.preventDefault();
+                        
+                        CURRENT_SCALE = Math.max(MIN_SCALE, CURRENT_SCALE - SCALE_STEP);
+                    }
+                };
+                
+                node.style.transform = `scale(${CURRENT_SCALE})`;
+                node.style.transformOrigin = "center center";
+                node.style.transition = "transform 0.1s ease-out";
+            });
+            window.addEventListener("wheel", (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+    
+                    if (e.deltaY < 0) {
+                        CURRENT_SCALE = Math.min(MAX_SCALE, CURRENT_SCALE + SCALE_STEP);
+                    } else {
+                        CURRENT_SCALE = Math.max(MIN_SCALE, CURRENT_SCALE - SCALE_STEP);
+                    };
+                };
+                node.style.transform = `scale(${CURRENT_SCALE})`;
+                node.style.transformOrigin = "center center";
+                node.style.transition = "transform 0.1s ease-out";
+            }, { passive: false });
+        };
+
+        function updateLineConnection(nodeA, nodeB, lineElement) {
+            const rectA = nodeA.getBoundingClientRect();
+            const rectB = nodeB.getBoundingClientRect();
+    
+            const x1 = rectA.left + rectA.width / 2;
+            const y1 = rectA.top + rectA.height / 2;
+            const x2 = rectB.left + rectB.width / 2;
+            const y2 = rectB.top + rectB.height / 2;
+    
+            const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+
+            lineElement.setAttribute("class", "connection-line");
+            lineElement.style.border = "4px solid var(--accent)";
+            lineElement.style.position = "absolute";
+            lineElement.style.zIndex = "-3000000";
+            lineElement.style.transformOrigin = "0 50%"; 
+            lineElement.style.width = `${distance}px`;
+            
+            lineElement.style.left = `${x1}px`;
+            lineElement.style.top = `${y1}px`;
+            
+            lineElement.style.transform = `rotate(${angle}deg)`;
+
+            document.body.appendChild(lineElement);
+        };
+
+        function nodeNetworkConnection() {
+            for(let i = 0; i < nodes.length; i++) {
+                const currentNode = nodes[i];
+                const groupNode = nodes[i + 1];
+    
+                const line = document.createElement("div");
+    
+                if(currentNode.id === null) continue;
+    
+                const parentNode = nodes.find(n => n.id === currentNode.parentId);
+
+                if(!parentNode) continue;
+    
+                updateLineConnection(parentNode.element, groupNode, line);
+            };
+        };
+
+        function onClickAnimation(nodeA, nodeB) {
+            nodeA.addEventListener("click", (e) => {
+                nodeB.style.transition = "200ms";
+                nodeB.style.transform = "translateY(30px)";
+                nodeB.style.background = "var(--accent)";
+                nodeB.style.visibility = "hidden";
+                nodeB.style.opacity = "0";
+                if(e.eventPhase ==  2) {
+                    nodeB.style.transition = "200ms";
+                    nodeB.style.background = "var(--background)";
+                    nodeB.style.visibility = "visible";
+                    nodeB.style.transform = "translateY(0)";
+                    nodeB.style.opacity = "1";
+                };
+                setTimeout(() => fadeOutAnimation(nodeA, nodeB), delayAnimation);
+            });
+        };
+
+        function fadeOutAnimation(nodeA, nodeB) {
+            if(nodeA.contains(nodeB)) {
+                nodeB.style.transition = "200ms";
+                nodeB.style.transform = "translateY(30px)";
+                nodeB.style.background = "var(--accent)";
+                nodeB.style.visibility = "hidden";
+                nodeB.style.opacity = "0"; 
+            };
+        };
+
+        function createSubNode(parentCard) {
+            if (currentQuestionIndex < QUESTIONS.length) {
+                const currentQuestion = QUESTIONS[currentQuestionIndex];
+                
+                const subNode = document.createElement("div");
+                const textAreaAnswer = document.createElement("textarea");
+                const btnDelete = document.createElement("button");
+
+                textAreaAnswer.setAttribute("class", "sub-card__field-answer");
+                textAreaAnswer.setAttribute("placeholder", "Enter answer here...");
+                textAreaAnswer.setAttribute("id", "form-answer");
+                textAreaAnswer.style.position = "absolute";
+                
+                subNode.setAttribute("class", "sub-card");
+                subNode.setAttribute("id", activeGroupId);
+                subNode.style.position = "absolute";
+                subNode.style.left = `${parentCard.offsetLeft + 200}px`;
+                subNode.style.top = `${parentCard.offsetTop + (currentQuestionIndex * 80)}px`;
+                subNode.style.zIndex = "-200000";
+                subNode.innerHTML = `<h3>${currentQuestion.question}</h4>`;
+
+                btnDelete.style.borderColor = "var(--destructive)";
+                btnDelete.textContent = "DELETE";
+                btnDelete.style.color = "var(--destructive-foreground)";
+                btnDelete.style.background = "var(--destructive)";
+                btnDelete.style.opacity = "0";
+                
+                btnDelete.addEventListener("mousemove", (e) => {
+                    btnDelete.style.background = "var(--destructive)";
+                    btnDelete.style.opacity = "1";
+
+                    function onMouseStop(event) {
+                        document.removeEventListener("mousemove", btnDelete.style.background = "none")
+                    };
+
+                    onMouseStop();
+                });
+
+                subNode.prepend(textAreaAnswer);
+                
+                onClickAnimation(subNode, textAreaAnswer);
+
+                textAreaAnswer.addEventListener("click", (e) => e.stopPropagation());
+                
+                subNode.addEventListener("mousedown", (e) => {
+                    const offsetX = e.clientX - subNode.offsetLeft;
+                    const offsetY = e.clientY - subNode.offsetTop;
+                    
+                    function onMouseMove(event) {
+                        subNode.style.left = `${event.clientX - offsetX}px`;
+                        subNode.style.top = `${event.clientY - offsetY}px`;
+
+                        checkAllCollisions();
+                    };
+                        
+                    function onMouseUp() {
+                        document.removeEventListener("mousemove", onMouseMove);
+                        document.removeEventListener("mouseup", onMouseUp);
+                    };
+                    
+                    document.addEventListener("mousemove", onMouseMove);
+                    document.addEventListener("mouseup", onMouseUp);
+                });
+
+                textAreaAnswer.addEventListener("keydown", (e) => {
+                    const start = textAreaAnswer.selectionStart;
+                    const end = textAreaAnswer.selectionEnd;
+                    const text = textAreaAnswer.value;
+                    if(e.key === "Enter") {
+                        if(e.shiftKey) {
+                            textAreaAnswer.value = text.substring(0, start) + "\n" + text.substring(end);
+
+                            textAreaAnswer.selectionStart = textAreaAnswer.selectionEnd = start;
+                        } else {
+                            e.preventDefault();
+
+                            let backQuestion = QUESTIONS[--currentQuestionIndex];
+                            const answerText = textAreaAnswer.value.trim();
+                            if(!answerText) return;
+                            if (currentQuestionIndex < QUESTIONS.length) {
+                                const currentQuestion = QUESTIONS[currentQuestionIndex];
+                
+                                subNode.innerHTML = `
+                                    <h3>${currentQuestion.question}</h4>
+                                `;
+
+                                subNode.prepend(textAreaAnswer);
+
+                                currentQuestionIndex++;
+                                
+                                createSubNode(subNode);
+
+                                checkAllCollisions();
+
+                                fadeOutAnimation(subNode, textAreaAnswer)
+                            };
+                            backQuestion--;
+                        };
+                    };
+                });
+
+                subNode.addEventListener("touchstart", (e) => {
+                    const touch = e.touches[0];
+                    const offsetX = touch.clientX - subNode.offsetLeft;
+                    const offsetY = touch.clientY - subNode.offsetTop;
+                    
+                    function onTouchMove(event) {
+                        const t = event.touches[0];
+                        subNode.style.left = `${t.clientX - offsetX}px`;
+                        subNode.style.top  = `${t.clientY - offsetY}px`;
+                        
+                        checkAllCollisions();
+                    };
+                    
+                    function onTouchStop() {
+                        document.removeEventListener("touchmove", onTouchMove);
+                        document.removeEventListener("touchend", onTouchStop);
+                        document.removeEventListener("touchcancel", onTouchStop);
+                    };
+                    
+                    document.addEventListener("touchmove", onTouchMove);
+                    document.addEventListener("touchend", onTouchStop);
+                    document.addEventListener("touchcancel", onTouchStop);
+                });
+                
+                document.body.prepend(subNode);
+
+                nodes.push(subNode);
+                
+                currentQuestionIndex++;
+        
+                applyCanvasScale(subNode);
+
+                checkAllCollisions();
+
+                nodeNetworkConnection();
+
+                moveCamera(subNode);
+
+                updateNodesCounter();
+            };
+        };
+
+        function clickNode(node) {
+            node.element.addEventListener("click", () => {
+                createSubNode(node.element);
+                
+                nodeNetworkConnection();
+            }, { once: true });
+        };
+        
+        function renderingNewConcept() {
+            const form = document.querySelector(".page-layout__field-concept");
+            const input = document.querySelector(".data-text");
+            const btnSettings = document.querySelector(".btn__settings");
+            const rearPanel = document.createElement("div");
+            const modalSettings = document.createElement("div");
+
+            rearPanel.setAttribute("class", "page-layout__rear");
+            modalSettings.setAttribute("class", "rear__settings");
+
+            rearPanel.appendChild(modalSettings);
+            rearPanel.addEventListener("click", () => rearPanel.remove());
+
+            modalSettings.innerHTML = `
+                <h1 class="settings__title">SNW Settings to make your learning experience more convenient.</h1>
+        
+                <div class="settings__body">
+                    <div class="settings__menu">
+                        <button class="settings__menu-btn active" data-target="profile">Profile</button>
+                        <button class="settings__menu-btn" data-target="theme">Theme</button>
+                        <button class="settings__menu-btn" data-target="controls">Controls</button>
+                        <button class="settings__menu-btn" data-target="system">System</button>
+                    </div>
+        
+                    <div class="settings__content">
+                        <div class="settings__panel active" id="profile-panel">
+                            <h3>Profile Settings</h3>
+                            <section>
+                                <div class="personal-info">
+                                    <div class="user-info"> 
+                                        <img src="${user.avatars[0]}" alt="User Profile">
+                                        <div class="user-data">
+                                            <h4>${user.name}</h4>
+                                            <h5>${user.email}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h2>All Analyzis Table Settings</h2>
+                                <table class="snw-info-table">
+                                  <thead>
+                                    <tr>
+                                      <th>Nodes</th>
+                                      <th>All Groups</th>
+                                      <th>Relational links</th>
+                                    </tr>
+                                  </thead>
+                                
+                                  <tbody>
+                                    <tr>
+                                      <td>${nodes.length}</td>
+                                      <td>0</td>
+                                      <td>0</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modalSettings.addEventListener("click", (e) => e.stopPropagation());
+            
+            btnSettings.addEventListener("click", () => document.body.prepend(rearPanel));
+
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const value = input.value.trim();
+                if(!value) return;
+
+                activeGroupId = `sub_card_${Date.now()}`;
+                activeParentId = null;
+                
+                const nodesContainer = document.createElement("div");
+                const card = document.createElement("div");
+
+                nodesContainer.setAttribute("class", "page-layout__nodes");
+
+                card.setAttribute("class", "card");
+                card.setAttribute("id", `card_${Date.now()}`);
+                card.dataset.groupId = activeGroupId;
+
+                const newNode = {
+                    id: card.id,
+                    element: card,
+                    parentId: activeParentId || null,
+                    groupId: activeGroupId
+                };
+                
+                const maxRangeX = window.innerWidth - CARD_SIZE / 2;
+                const maxRangeY = window.innerHeight - CARD_SIZE / 2;
+                
+                const randomX = Math.floor(Math.random() * (maxRangeX - 50) + 50);
+                const randomY = Math.floor(Math.random() * (maxRangeY - 150) + 150); 
+                
+                newNode.element.style.position = "absolute";
+                newNode.element.style.zIndex = "-1000000";
+                let nodeLeft = newNode.element.style.left = `${randomX}px`;
+                let nodeTop = newNode.element.style.top = `${randomY}px`;
+                newNode.element.innerHTML = `<h3>${value}</h3>`;
+                newNode.element.style.transition = "150ms";
+                
+                document.body.prepend(newNode.element);
+                
+                nodes.push(newNode);
+
+                clickNode(newNode);
+
+                newNode.element.addEventListener("mousedown", (e) => {
+                    const offsetX = e.clientX - newNode.element.offsetLeft;
+                    const offsetY = e.clientY - newNode.element.offsetTop;
+                    
+                    function onMouseMove(event) {
+                        newNode.element.style.left = `${event.clientX - offsetX}px`;
+                        newNode.element.style.top = `${event.clientY - offsetY}px`;
+                        
+                        checkAllCollisions();
+                    };
+                        
+                    function onMouseUp() {
+                        document.removeEventListener("mousemove", onMouseMove);
+                        document.removeEventListener("mouseup", onMouseUp);
+                    };
+                    
+                    document.addEventListener("mousemove", onMouseMove);
+                    document.addEventListener("mouseup", onMouseUp);
+                });
+
+                newNode.element.addEventListener("touchstart", (e) => {
+                    const touch = e.touches[0];
+                    const offsetX = touch.clientX - newNode.element.offsetLeft;
+                    const offsetY = touch.clientY - newNode.element.offsetTop;
+                    
+                    function onTouchMove(event) {
+                        const t = event.touches[0];
+                        newNode.element.style.left = `${t.clientX - offsetX}px`;
+                        newNode.element.style.top  = `${t.clientY - offsetY}px`;
+                        
+                        checkAllCollisions();
+                    };
+                    
+                    function onTouchStop() {
+                        document.removeEventListener("touchmove", onTouchMove);
+                        document.removeEventListener("touchend", onTouchStop);
+                        document.removeEventListener("touchcancel", onTouchStop);
+                    }
+                    
+                    document.addEventListener("touchmove", onTouchMove);
+                    document.addEventListener("touchend", onTouchStop);
+                    document.addEventListener("touchcancel", onTouchStop);
+                });
+
+                moveCamera(newNode.element);
+
+                applyCanvasScale(newNode.element);
+
+                updateNodesCounter();
+                
+                input.value = "";
+            });
+
+            checkAllCollisions();
+        };
+
+        renderingNewConcept();
+
+        document.querySelectorAll("img").forEach(img => img.addEventListener("dragstart", (e) => e.preventDefault()));
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const bg = document.querySelector(".bg-mars__img");
+            const btnTheme = document.querySelector(".btn__theme");
+            const btnAudio = document.querySelector(".btn__audio");
+
+            btnTheme.addEventListener("click", () => toggleTheme(btnTheme, bg, "src"));
+            btnAudio.addEventListener("click", () => audioManager("./src/shared/assets/audio/bg/general.mp3", true, 0.5, btnAudio));
+        });
+    </script>
+</body>
+</html>

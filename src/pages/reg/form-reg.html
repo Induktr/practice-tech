@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Validation Form</title>
+</head>
+<body>
+    <section class="form-content">
+        <!-- [DOC]: Header Of Heading: HOH - Это то, что обьясняет весь смысл данной формы, для присутствие понимания у каждого человека. -->
+        <header class="form-content__heading">
+            <h2>Register for service</h2>
+            <p>Register for exit in one the moment service.</p>
+        </header>
+        <!-- [DOC]: Form Register: FR - Это сама физическия и интерактивня сситема регситрации, которая индитифетирует каждого пользователя в данном сервисе. -->
+        <form class="form-content__form">
+            <label for="name">Name</label>
+            <input
+                id="name"
+                type="text"
+                class="form-content__name"
+            ><br/>
+            <label for="password">Password</label>
+            <input
+                id="password"
+                type="password"
+                class="form-content__password"
+            ><br/>
+            <label for="age">Age</label>
+            <input
+                id="age"
+                type="number"
+                class="form-content__age"
+            ><br/>
+            <button
+                class="form__reg"
+            >
+                Register
+            </button>
+        </form>
+        <!-- [DOC]: Footer Scenarios: FS - Это те сценарии, которые учитываються во время регистрации, которые предотвращают потерю цыфрового следа существующей индетификации пользователя в данном сервисе. -->
+        <footer class="">
+            <p>Don't any password? <a href="/new-password.html">Replace Password</a></p>
+        </footer>
+    </section>
+    
+    <script>
+        function formValidation() {
+            const formEl = document.querySelector(".form-content__form");
+            const inputEls = document.querySelectorAll("input");
+
+            const IR = {
+                name: { min: 4, max: 20, pattern: /^[A-Za-z]+$/ },
+                password: { min: 12, max: 25, type: "password" },
+                age: { min: 5, max: 99, type: 'number' }
+            };
+
+            formEl.addEventListener("input", (e) => {
+                e.preventDefault();
+
+                for (const input of inputEls) {
+                    const rules = IR[input.id];
+                    const value = input.value;
+                    
+                    let err = "";
+                    
+                    if (!value && !input.validity.valueMissing) {
+                        err = "Field is not empty.";
+                    } else if (value.length < rules.min) {
+                        err = `Min ${rules.min} symbol'(s)`;
+                    } else if (value.length > rules.max) {
+                        err = `Max ${rules.max} symbol'(s)`;
+                    } else if (rules.pattern.test(value) === true) {
+                        err = 'Error: name is not defined spec symbol\'s.';
+                    };
+
+                    input.setCustomValidity(err);
+
+                    if (err) {
+                        input.reportValidity();
+                        return;
+                    };
+                };
+            });
+        };
+        formValidation();
+    </script>
+</body>
+</html>
