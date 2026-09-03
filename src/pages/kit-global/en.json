@@ -1,0 +1,168 @@
+{
+  "nav": {
+    "cases": "Cases",
+    "our_products": "Our Products",
+    "services": "Services",
+    "about_us": "About Us",
+    "contact_us": "Contact Us"
+  },
+  "products_dropdown": {
+    "restup": "Restup",
+    "ecommerce": "E-Commerce"
+  },
+  "services_dropdown": {
+    "tech_stack": "Tech Stack",
+    "our_approach": "Our Approach"
+  },
+  "about_dropdown": {
+    "our_team": "Our Team",
+    "kitapp": "Kitapp"
+  },
+  "hero": {
+    "title_prefix": "We build applications with"
+  },
+  "partners": {
+    "title": "Why partners trust us",
+    "card1": "Over a hundred satisfied clients worldwide since 2014.",
+    "card2": "A well-coordinated team of specialists with a flexible approach to every project.",
+    "card3": "We are always near. Ready to realize all your product ideas or outsourcing needs."
+  },
+  "approach": {
+    "title": "Our Approach",
+    "step1_title": "Market Research",
+    "step1_desc": "We analyze the market: design, structure, and functionality of similar apps. We take competitors' mistakes into account to give users more features and build a quality product.",
+    "step2_title": "Technical Specification",
+    "step2_desc": "We prepare a detailed technical specification describing data structure, design, and functionality. Every detail is discussed and approved with the client.",
+    "step3_title": "Unique UX/UI Design",
+    "step3_desc": "We follow Material Design and Human Interface Guidelines, ensuring simplicity, convenience, and a modern look. Our apps pass Google and Apple moderation without delays.",
+    "step4_title": "Product Development",
+    "step4_desc": "We perform front-end and back-end development and build admin dashboards. We keep the client informed and test every stage thoroughly before release.",
+    "contact_title": "Contact Us",
+    "contact_desc": "For over 10 years we have been building effective cross-functional teams and successful projects. We select the right talent for your business culture. Ask us how?",
+    "schedule_call": "Schedule a Call"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "All our projects are created taking into account modern trends and methodologies. We discuss all decisions with the client in detail.",
+    "tags": {
+      "all": "All",
+      "mobile": "Mobile App",
+      "landing": "Landing Page",
+      "web": "Web App",
+      "fintech": "Fintech & Wallets",
+      "med_edu": "Medical & Edu Platforms"
+    },
+    "show_all": "Show All"
+  },
+  "products": {
+    "title": "Our Products",
+    "subtitle": "We create turn-key solutions for restaurant and retail industries. Our products help automate processes, improve service, and boost revenue.",
+    "restup": {
+      "subtitle": "Universal mobile application for business",
+      "title": "RestUp",
+      "desc": "Catalog, ordering, delivery, and a handy admin panel allowing you to launch online in just 10 days — with zero commissions. Available on iOS and Android."
+    },
+    "ecommerce": {
+      "subtitle": "Mobile app to grow your business",
+      "title": "E-Commerce App",
+      "desc": "Most of your potential clients are active smartphone users. Give them the ability to quickly buy your products via a convenient online store app."
+    },
+    "established_audience": "Established Audience",
+    "engaged": "Engaged",
+    "rating_google": "Google Play Rating",
+    "users_567": "567 users",
+    "users_241": "241 users",
+    "new_users_92": "92 new users",
+    "new_users_41": "41 new users",
+    "growth_35": "+3.5% ▲ compared to 30 days ago",
+    "growth_25": "+2.5% ▲ compared to 30 days ago",
+    "growth_15": "+1.5% ▲ compared to 30 days ago"
+  },
+  "how_help": {
+    "title": "How We Help",
+    "desc": "We combine strategy, creativity, and reliable production into a single solution.",
+    "go_to_form": "Go to Form",
+    "design": "Design",
+    "design_desc": "A single solution for Android and iOS development. Build on a modern framework — save time and budget.",
+    "design_quote": "UX research, wireframes, user flow prototypes, UI styling",
+    "crossplatform": "Cross-Platform Apps",
+    "crossplatform_desc": "A single solution for Android and iOS development. Building on a platform with a modern framework — saving time and money.",
+    "crossplatform_quote": "React Native, TypeScript, Back-end (Node.js — Express/Nest), MongoDB, SQLite, GraphQL, Firebase and other third-party APIs",
+    "web": "Web Development",
+    "web_desc": "Custom platforms on Next.js, complex business websites and powerful admin panels with TypeScript, clean architecture and enterprise-level performance.",
+    "web_quote": "React.js (Next, SSR), Redux, TypeScript, SPA, HTML, CSS, REST API",
+    "support": "Tech Support",
+    "support_desc": "Proactive monitoring and maintenance: security updates, performance optimization and release management for web, mobile and hosting.",
+    "support_quote": "CDN, CI/CD pipelines, DevOps, Docker, Gitflow, Sentry, cloud services",
+    "marketing": "Marketing Services",
+    "marketing_desc": "Contextual and targeted advertising, marketing campaigns, ASO.",
+    "marketing_quote": "Google Ads, ASO, analytics, tracking key metrics (ROI)",
+    "analytics": "Analytics",
+    "analytics_desc": "Tracking custom and key events — control engagement, retention and revenue growth.",
+    "analytics_quote": "Firebase Analytics + GA4, AppMetrica, AppsFlyer"
+  },
+  "tech_stack": {
+    "title": "Tech Stack",
+    "desc": "We provide custom software development services using proven technologies.",
+    "development": "Development",
+    "databases": "Databases",
+    "infrastructure": "Infrastructure"
+  },
+  "direct_link_cta": {
+    "title": "Time to bring ideas to life together"
+  },
+  "about_section": {
+    "desc1": "KIT Global is an integrated IT agency from Ukraine. We provide web and mobile product development services. We create projects for businesses, NGOs, educational and government institutions in Ukraine, Europe and the USA. The agency is focused on effective solutions.",
+    "desc2": "Our highly qualified team handles all stages of product creation — from audit to support and promotion of the finished project. Our clients value this, as they don't need to search for multiple contractors, development timelines are reduced and fair pricing is ensured."
+  },
+  "team": {
+    "title": "Our Team",
+    "oleksii_name": "Oleksii, Co-owner",
+    "oleksii_role": "Our Leader & CEO of company",
+    "oleksandr_name": "Oleksandr, Co-owner",
+    "oleksandr_role": "Our Technical Brain & CTO",
+    "yulia_role": "Sales Manager",
+    "artem_mkt_role": "Head of Marketing",
+    "zakhar_role": "Lead Front-end Mobile Engineer",
+    "yaroslav_role": "Project Manager",
+    "anton_role": "QA Specialist",
+    "dmytro_fe_role": "Lead Frontend Developer",
+    "valeriia_role": "Lead UX/UI Designer",
+    "daniil_role": "Back-end Developer",
+    "artem_be_role": "Team Lead Back-end Developer",
+    "dmytro_mob_role": "Front-end Mobile Engineer",
+    "down_panel_title": "Our Great Team",
+    "down_panel_desc": "Our team creates flexible and effective solutions that help businesses grow. Thanks to professionalism and coordinated work, we build long-term partnerships."
+  },
+  "contact_section": {
+    "title": "CONTACT US",
+    "desc": "We will create the ideal mobile application for you, functioning flawlessly and fulfilling all user and business needs."
+  },
+  "reviews": {
+    "title": "Are you with us?",
+    "desc": "Read our client reviews and learn why over 3,000 companies chose Kit Global.",
+    "form_name": "Enter name*",
+    "form_phone": "Your phone number*",
+    "form_email": "Email address*",
+    "form_details": "Project details*",
+    "form_disclaimer": "* This site is protected by reCAPTCHA and subject to the Privacy Policy and Terms of Service",
+    "form_submit": "Submit"
+  },
+  "footer": {
+    "desc": "KIT GLOBAL LLC — Outsourcing mobile & web app development and product company",
+    "edrpou": "EDRPOU 43344434",
+    "contacts": "Contacts",
+    "trusted": "Trusted by",
+    "location": "Location",
+    "address": "1st Naberezhna r. Strelky, 9A, Sumy, Ukraine"
+  },
+  "modal": {
+    "title": "CONTACT US",
+    "name_placeholder": "Your Name*",
+    "phone_placeholder": "Your Phone Number*",
+    "email_placeholder": "Email Address*",
+    "details_placeholder": "Project Details*",
+    "disclaimer": "* This site is protected by reCAPTCHA and subject to the Privacy Policy and Terms of Service",
+    "submit": "Submit"
+  }
+}

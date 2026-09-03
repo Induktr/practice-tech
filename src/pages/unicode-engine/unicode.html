@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>INDUKTR UNICODE ENGINE</title>
+</head>
+<body>
+    <header class="engine_header">
+        <div class="engine_header__logo">
+            <h2>INDUKTR 🌀 UNICODE ENGINE</h2>
+            <h4>STATUS: STABLE 🌀</h4>
+        </div>
+    </header>
+    <main class="input-data">
+        <div class="input-data__title">
+            <h1 class="title__content">Welcome to this crucial project—figure out the code, and you'll be happy!</h1>
+        </div>
+        <textarea id="field-data" placeholder="Enter here text data, and Unicode Symbols..."></textarea>
+    </main>
+    <section class="cards">
+        <article class="cards__card-len">
+            <h2>[REAL LENGTH]:</h2>
+            <p class="card-len__info">0 Naive length: (0)</p>
+        </article>
+        <article class="cards__card-hex">
+            <h2>[HEX DECONSTRUCT]:</h2>
+            <p class="card-hex__info">U+XXXX</p>
+        </article>
+        <article class="cards__card-slug">
+            <h2>[SAFE SLUG]:</h2>
+            <p class="card-slug__info">https://www.youtube.com/@Induktr/videos</p>
+        </article>
+    </section>
+    <footer class="base-info">
+        <div class="base-info__version-system">
+            <p>Kernel: Unicode v15.1</p>
+            <div class="version-system__status">
+                <p>Status: Stable 🌀</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        function parserString(str) {
+            const data = str.normalize("NFC");
+
+            const currLen = str.length;
+
+            const urlRegex = /(https:\/\/[^\s"'<>]+)/g;
+
+            const matches = data.matchAll(urlRegex);
+
+            let matchUrl = "";
+
+            for (const match of matches) matchUrl = match[1];
+
+            const cleanText = encodeURI(matchUrl);
+            
+            const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
+            const segments = segmenter.segment(data);
+            const segmentsArray = [...segments];
+            const realLen = segmentsArray.length;
+        
+            const codePints = [];
+        
+            for(const char of data) {
+                const codePointDecimal = char.codePointAt(0); 
+        
+                let hex = codePointDecimal.toString(16).toUpperCase();
+        
+                if (hex.length < 4) {
+                    hex = hex.padStart(4, '0');
+                };
+        
+                codePints.push(`U+${hex}`);
+            };
+        
+            return { len: `${realLen} Naive length: (${currLen})`, hex: codePints.join(" | "), slug: cleanText };
+        };
+        
+        function renderingUi() {
+            const inputData = document.getElementById("field-data");
+            const hLen = document.querySelector(".card-len__info");
+            const hHex = document.querySelector(".card-hex__info");
+            const cardHex = document.querySelector(".cards__card-hex")
+            const hSlug = document.querySelector(".card-slug__info");
+            const displayArea = document.createElement("div");
+
+            displayArea.className = "hex-modal";
+
+            let hexRes = "";
+        
+            inputData.addEventListener("input", (e) => {
+                const value = e.target.value.normalize("NFC");
+                
+                if(!value || value.length > 2000) {
+                    hHex.textContent = "U+XXXX";
+                    hLen.textContent = "0 Naive length: (0)";
+                    hSlug.textContent = "https://www.youtube.com/@Induktr/videos";
+                    return;
+                };
+                
+                const { len, hex, slug } = parserString(value);
+
+                hexRes = hex;
+
+                hLen.textContent = len;
+                hHex.textContent = `${hex.slice(-hex.length, 130)}...`;
+                hSlug.textContent = slug;
+            });
+
+            cardHex.addEventListener("click", (e) => { 
+                displayArea.innerHTML = `<p>${hexRes}</p>`;
+
+                if(hHex.textContent === "U+XXXX") return;
+
+                const rect = cardHex.getBoundingClientRect();
+                displayArea.style.top = `${rect.bottom + window.scrollY / 40}px`;
+                displayArea.style.left = `${rect.left + window.scrollX}px`;
+                displayArea.style.width = `${rect.width}px`;
+                
+                displayArea.classList.toggle("active");
+
+                return document.body.prepend(displayArea);
+            });
+        };
+
+        renderingUi();
+    </script>
+</body>
+</html>

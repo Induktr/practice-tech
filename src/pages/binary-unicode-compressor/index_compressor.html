@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style_compressor.css">
+    <title>Unicode Compressor</title>
+</head>
+<body>
+    <header class="header-info-engine">
+        <section class="logo-title">
+            <article class="container-logo">
+                <div class="logo-img">
+                    <h2>B</h2>
+                </div>
+                <h2><span style="color: var(--text-primary);">BINARY</span> INSIGHT</h2>
+                <hr>
+                <h3 style="color: var(--tin-plated-lead);">Analysis Dashboard</h3>
+            </article>
+        </section>
+        <section class="menu-settings">
+            <article class="container-menu">
+                <h3 style="color: var(--tin-plated-lead);">BinaryInsight v1.2</h3>
+                <div class="state-processing">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#6C7682"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-search-icon lucide-search"
+                        >
+                        <path d="m21 21-4.34-4.34"/>
+                        <circle cx="11" cy="11" r="8"/>
+                    </svg>
+                </div>
+                <div class="settings">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#6C7682"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-settings-icon lucide-settings"
+                        >
+                        <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </div>
+            </article>
+        </section>
+    </header>
+    <main class="uploading-proccessing-files">
+        <div class="input-file">
+            <div class="form-upload">
+                <label for="file">LOAD BINARY / ENTER PATH</label>
+                <input
+                    class="new-file"
+                    id="file"
+                    type="button"
+                    value="Uploading new file, for your proccessing your request."
+                >
+            </div>
+            <button class="start-analyze">Analyze</button>
+        </div>
+        <section class="base-file-info">
+            <article class="file-name">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#6C7682"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-file-icon lucide-file"
+                >
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5"/>
+                </svg>
+                <p style="color: var(--tin-plated-lead);">File: <span style="color: var(--text-primary);">exmaple.txt</span></p>
+            </article>
+            <article class="file-size">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#6C7682"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-database-icon lucide-database"
+                    >
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M3 5V19A9 3 0 0 0 21 19V5"/>
+                    <path d="M3 12A9 3 0 0 0 21 12"/>
+                </svg>
+                <p style="color: var(--tin-plated-lead);">Size: <span style="color: var(--text-primary);">0.0 B</span></p>
+            </article>
+        </section>
+        <section class="container-cards">
+            <article class="card-vs-storage">
+                <h2 style="color: var(--text-primary);"><span style="color: var(--high-voltage);">1</span> NAIVE VS REAL STORAGE</h2>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

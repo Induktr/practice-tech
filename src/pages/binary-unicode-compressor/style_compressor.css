@@ -1,0 +1,212 @@
+:root {
+    --color-white: #ffffff;
+    --text-primary: var(--color-white);
+    --deep-silicon: #12151A;
+    --sub-board: #1A1E24;
+    --shadow-elements: #00000097;
+    --oxidized-copper: #D47A55;
+    --high-voltage: #E29B7A;
+    --tin-plated-lead: #6C7682;
+    --byte-error: #BC4F4F;
+    --byte-ok: #4E8C6F;
+}
+
+body {
+    box-sizing: border-box;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    background: var(--deep-silicon);
+    color: var(--oxidized-copper);
+}
+
+* {
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+.header-info-engine {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 0 20px;
+    margin-bottom: auto;
+    height: 80px;
+    background-color: var(--sub-board);
+    border-bottom: 2px solid var(--high-voltage);
+}
+
+.logo-img {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--high-voltage);
+    border-radius: 15px;
+}
+
+.logo-img h2 {
+    color: var(--high-voltage);
+}
+
+.container-logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding-right: 20px;
+}
+
+.container-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.state-processing,
+.settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--tin-plated-lead);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+:is(
+    .state-processing,
+    .settings,
+    .file-name,
+    .file-size
+) svg {
+    width: 25px;
+    height: 25px;
+}
+
+.uploading-proccessing-files {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+}
+
+.input-file {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.new-file {
+    width: 500px;
+    height: 50px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px var(--shadow-elements);
+}
+
+.start-analyze {
+    height: 50px;
+    width: 100px;
+    margin-top: auto;
+    border-radius: 15px;
+    border: 1px solid var(--oxidized-copper);
+    background: linear-gradient(var(--oxidized-copper), var(--high-voltage), var(--oxidized-copper));
+    box-shadow: 5px 5px 10px var(--shadow-elements);
+    transition: 200ms;
+}
+
+.start-analyze:hover {
+    transition: 100ms;
+}
+
+.form-upload {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-upload label {
+    color: var(--tin-plated-lead);
+    font-size: 16px;
+}
+
+.base-file-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: auto;
+    gap: 20px;
+}
+
+.file-name,
+.file-size {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    width: 180px;
+    height: 50px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px var(--shadow-elements);
+    border: 1px solid var(--tin-plated-lead);
+    background: var(--sub-board);
+    padding: 10px;
+    gap: 5px;
+}
+
+.container-cards {
+    display: grid;
+
+}
+
+button,
+input[type="button"] {
+    cursor: pointer;
+}
+
+input {
+    background-color: var(--sub-board);
+    color: var(--oxidized-copper);
+    height: 50px;
+    resize: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    outline: none;
+    border: 2px solid;
+    border-color: linear-gradient(var(--oxidized-copper), var(--high-voltage), var(--oxidized-copper));;
+}
+
+input::placeholder {
+    opacity: 0.5;
+    color: var(--oxidized-copper);
+}
+
+hr {
+    height: 30px;
+    border: 1px solid var(--tin-plated-lead);
+    opacity: 0.8;
+    margin: 0 10px 0 10px;
+}
