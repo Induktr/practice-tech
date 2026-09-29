@@ -1,0 +1,26 @@
+[
+  {
+    "id": "tx-X01#+_5@+S+_+)!",
+    "name": "Induktr Studio Genesis",
+    "amount": 0.5,
+    "currency": "SOL",
+    "createdAt": "23.09.2026",
+    "updatedAt": "13:42:11"
+  },
+  {
+    "id": "tx-X02#+_5@+S+_+)!",
+    "name": "Security Audit Payment",
+    "amount": 1.5,
+    "currency": "SOL",
+    "createdAt": "23.09.2026",
+    "updatedAt": "14:10:00"
+  },
+  {
+    "id": "tx-X03#+_5@+S+_+)!",
+    "name": "Server Infrastructure",
+    "amount": 250.0,
+    "currency": "USDT",
+    "createdAt": "23.09.2026",
+    "updatedAt": "15:00:22"
+  }
+]

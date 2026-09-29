@@ -66,8 +66,8 @@
                     </div>
                     <div class="hero__scroll-wrapper">
                         <a href="#projects" class="hero__scroll-cta">
-                          <span class="hero__scroll-text">Scroll for more</span>
-                          <img class="hero__scroll-icon" width="14" height="14" src="./src/shared/assets/icons/arrows/slash-v1.svg" alt="Scroll Arrow Icon">
+                            <span class="hero__scroll-text">Scroll for more</span>
+                            <img class="hero__scroll-icon" width="14" height="14" src="./src/shared/assets/icons/arrows/slash-v1.svg" alt="Scroll Arrow Icon">
                         </a>
                     </div>
                 </div>
@@ -170,13 +170,13 @@
                     <div class="service-card__body">
                         <div class="service-card__header">
                             <h3 class="service-card__title">SaaS Platforms</h3>
-                            <span class="service-card__index service-card__index--opacity">/01</span>
+                            <span class="service-card__index">/01</span>
                         </div>
                         <p class="service-card__description">We build scalable, high-performance SaaS platforms with robust architecture, authentication systems, and payment integrations. Our solutions are designed for growth and long-term success.</p>
                         <div class="service-card__previews">
                             <div class="service-card__preview-item">
                                 <div class="service-card__preview-media">
-                                    <img class="service-card__preview-media" width="390" height="246" src="./src/shared/assets/images/Work Preview.png" alt="SaaS Project Preview 1">
+                                    <img width="390" height="246" src="./src/shared/assets/images/Work Preview.png" alt="SaaS Project Preview 1">
                                 </div>
                                 <div class="service-card__preview-tags">
                                     <span class="tag tag--solid">Next.js</span>
@@ -236,7 +236,7 @@
                     <div class="service-card__body">
                         <div class="service-card__header">
                             <h3 class="service-card__title">AI-Powered Applications</h3>
-                            <span class="service-card__index service-card__index--extra-muted">/03</span>
+                            <span class="service-card__index">/03</span>
                         </div>
                         <p class="service-card__description">We integrate OpenAI, Claude AI, and custom AI models into web applications. From intelligent chatbots to automated workflows, we bring AI capabilities to your products.</p>
                         <div class="service-card__previews">
@@ -269,7 +269,7 @@
                     <div class="service-card__body">
                         <div class="service-card__header">
                             <h3 class="service-card__title">3D & Animated Experiences</h3>
-                            <span class="service-card__index service-card__index--opacity">/04</span>
+                            <span class="service-card__index">/04</span>
                         </div>
                         <p class="service-card__description">Interactive 3D websites and animated experiences using Three.js, React Three Fiber, and GSAP. We create immersive web experiences that engage and captivate users.</p>
                         <div class="service-card__previews">
@@ -305,29 +305,34 @@
                 <h2 class="about__title">About Us</h2>
                 <div class="about__content">
                     <p class="about__text">Caliber Agency is a full-stack IT company specializing in modern, scalable, high-performance web applications and enterprise solutions. We are NOT a basic website agency—we build engineering-heavy products for serious clients.</p>
-                    <p class="about__sub-text">With 6+ years of experience per developer and 40+ complex projects delivered, we bring strong SaaS & dashboard architecture expertise, AI integration capabilities, advanced 3D web experiences (R3F, Three.js), and comprehensive backend engineering. We offer a strategic, long-term partnership approach focused on high quality, scalability, and engineering excellence.</p>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
         <section class="contact-section" id="contact">
+            <div class="contact-section__header">
+                <h2 class="contact-section__title">Start a Project</h2>
+            </div>
             <form class="contact-form" action="#">
-              <div class="contact-form__row">
-                <label>
-                  <input class="form-input" type="text" aria-label="Enter Name" placeholder="Your name *">
-                  <span class="error-message"></span>
+                <div class="contact-form__row">
+                    <label class="form-field">
+                        <input class="form-input" name="name" type="text" aria-label="Enter Name" placeholder="Your name *">
+                        <span class="error-message"></span>
+                    </label>
+                    <label class="form-field">
+                        <input class="form-input" name="email" type="email" aria-label="Enter Email" placeholder="Your email *">
+                        <span class="error-message"></span>
+                    </label>
+                </div>
+                <label class="form-field form-field--full">
+                    <textarea name="description" class="form-textarea" aria-label="Enter Words About Project" placeholder="A few words about your project"></textarea>
+                    <span class="error-message"></span>
                 </label>
-                <label>
-                  <input class="form-input" type="email" aria-label="Enter Email" placeholder="Your email *">
-                  <span class="error-message"></span>
-                </label>
-              </div>
-              <textarea name="description" class="form-textarea" aria-label="Enter Words About Project" placeholder="A few words about your project"></textarea>
-              <button type="submit" aria-label="Submit" class="contact-form__submit-btn">
-                <span class="contact-form__submit-text">Submit</span>
-                <img class="contact-form__submit-icon" width="16" height="16" src="./src/shared/assets/icons/arrows/slash-v1.svg" alt="Submit Arrow">
-              </button>
+                <button type="submit" aria-label="Submit" class="contact-form__submit-btn">
+                    <span class="contact-form__submit-text">Submit</span>
+                    <img class="contact-form__submit-icon" width="16" height="16" src="./src/shared/assets/icons/arrows/slash-v1.svg" alt="Submit Arrow">
+                </button>
             </form>
         </section>
     </main>
@@ -347,9 +352,9 @@
                     <li><a class="footer__nav-link" href="#contact">Contact</a></li>
                 </ul>
             </div>
-            <div class="footer__card--contact">
-                <img class="footer__star-icon" width="19" height="19" src="./src/shared/assets/icons/figures/vertical-star.svg" alt="Vertical Star">
+            <div class="footer__card footer__card--contact">
                 <a class="footer__email-link" href="mailto:support@caliberagency.com?subject=Message%20from%20your%20site">info@caliberagency.com</a>
+                <img class="footer__star-icon" width="19" height="19" src="./src/shared/assets/icons/figures/vertical-star.svg" alt="Vertical Star">
             </div>
             <div class="footer__card footer__card--full-height">
                 <div class="footer__section">
@@ -368,6 +373,6 @@
     </footer>
 
     <!-- App Scripts -->
-    <script async type="module" src="./src/app/app.js"></script>
+    <script type="module" src="./src/app/app.js"></script>
 </body>
 </html>

@@ -1,28 +1,97 @@
-export function toggle() {
-  const themeToggle = document.querySelector(".header__theme-toggle");
-  if (!themeToggle) return;
+const DEFAULT_OPTIONS = {
+  triggerSelector: ".header__theme-toggle, [data-theme-toggle]",
+  storageKey: "caliber_theme",
+  defaultTheme: "light",
+  attribute: "data-theme",
+  icons: {
+    dark: "./src/shared/assets/icons/theme/sun.svg",
+    light: "./src/shared/assets/icons/theme/moon.svg"
+  },
+  onThemeChange: null
+};
 
-  const iconEl = themeToggle.querySelector(".header__theme-icon");
+export function createThemeManager(options = {}) {
+  const config = { ...DEFAULT_OPTIONS, ...options };
+  const root = document.documentElement;
 
-  const saved = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const initial = saved || (prefersDark ? "dark" : "light");
-  document.documentElement.setAttribute("data-theme", initial);
-  updateIcon(initial);
+  const getSystemTheme = () => {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  };
 
-  themeToggle.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-    updateIcon(next);
+  const getStoredTheme = () => {
+    try {
+      return localStorage.getItem(config.storageKey);
+    } catch {
+      return null;
+    }
+  };
+
+  const updateUI = (theme) => {
+    root.setAttribute(config.attribute, theme);
+    root.setAttribute("color-scheme", theme);
+
+    try {
+      localStorage.setItem(config.storageKey, theme);
+    } catch {}
+
+    // Update icons in any attached trigger elements
+    const triggers = typeof config.triggerSelector === "string"
+      ? document.querySelectorAll(config.triggerSelector)
+      : (config.triggerSelector instanceof NodeList ? config.triggerSelector : [config.triggerSelector]);
+
+    triggers.forEach((btn) => {
+      if (!btn) return;
+      const icon = btn.querySelector("img, svg");
+      if (icon && icon.tagName.toLowerCase() === "img") {
+        icon.src = theme === "dark" ? config.icons.dark : config.icons.light;
+        icon.alt = theme === "dark" ? "Switch to Light Theme" : "Switch to Dark Theme";
+      }
+    });
+
+    if (typeof config.onThemeChange === "function") {
+      config.onThemeChange(theme);
+    }
+
+    // Dispatch a standard custom event so ANY component in the app can listen
+    window.dispatchEvent(new CustomEvent("themechange", { detail: { theme } }));
+  };
+
+  let currentTheme = getStoredTheme() || getSystemTheme() || config.defaultTheme;
+  updateUI(currentTheme);
+
+  const setTheme = (nextTheme) => {
+    currentTheme = nextTheme;
+    updateUI(nextTheme);
+  };
+
+  const toggleTheme = () => {
+    const next = currentTheme === "dark" ? "light" : "dark";
+    setTheme(next);
+  };
+
+  const clickHandlers = [];
+  const triggers = typeof config.triggerSelector === "string"
+    ? document.querySelectorAll(config.triggerSelector)
+    : (config.triggerSelector instanceof NodeList ? config.triggerSelector : [config.triggerSelector]);
+
+  triggers.forEach((btn) => {
+    if (!btn) return;
+    const handler = (e) => {
+      e.preventDefault();
+      toggleTheme();
+    };
+    btn.addEventListener("click", handler);
+    clickHandlers.push({ btn, handler });
   });
 
-  function updateIcon(theme) {
-    if (!iconEl) return;
-    iconEl.src = theme === "dark"
-      ? "./src/shared/assets/icons/theme/sun.svg"
-      : "./src/shared/assets/icons/theme/moon.svg";
-    iconEl.alt = theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode";
-  }
+  return {
+    getTheme: () => currentTheme,
+    setTheme,
+    toggleTheme,
+    destroy: () => clickHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler))
+  };
+}
+
+export function toggle(options = {}) {
+  return createThemeManager(options);
 }

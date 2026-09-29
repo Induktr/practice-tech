@@ -1,0 +1,1 @@
+export const ledger = Object.create(null);

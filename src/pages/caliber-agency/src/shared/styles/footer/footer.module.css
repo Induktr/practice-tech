@@ -1,0 +1,201 @@
+/* ==========================================================================
+   Caliber Agency - Footer Module (FSD Shared Layer)
+   ========================================================================== */
+
+.caliber-footer {
+    position: relative;
+    width: 100%;
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: clamp(4rem, 8vw, 7.5rem) clamp(1.5rem, 5vw, 4.5rem) clamp(2.5rem, 5vw, 4rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3rem, 6vw, 5rem);
+    margin-top: clamp(3rem, 6vw, 5rem);
+}
+
+/* --- Massive Brand Title with Elevator Lift Effect --- */
+.footer__brand {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.footer__brand-title {
+    font-family: var(--font-sans);
+    font-size: clamp(3.5rem, 13vw, 12rem);
+    font-weight: var(--fw-bold);
+    line-height: 0.85;
+    letter-spacing: var(--ls-tighter);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    user-select: none;
+    text-align: center;
+    transform: translate3d(0, 60px, 0);
+    opacity: 0.2;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+}
+
+.caliber-footer.is-visible .footer__brand-title {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+}
+
+/* --- Footer Cards Grid --- */
+.footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+    width: 100%;
+}
+
+/* --- Footer Card Base --- */
+.footer__card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: clamp(1.5rem, 2.5vw, 2.25rem);
+    background-color: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: transform var(--transition-normal) var(--ease-out),
+                border-color var(--transition-normal) var(--ease-out),
+                box-shadow var(--transition-normal) var(--ease-out);
+}
+
+.footer__card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-border-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.footer__card--full-height {
+    min-height: 220px;
+}
+
+/* --- Navigation Card --- */
+.footer__nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footer__nav-link {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: var(--fs-body-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast) var(--ease-out),
+                transform var(--transition-fast) var(--ease-out);
+}
+
+.footer__nav-link:hover {
+    color: var(--color-accent);
+    transform: translateX(4px);
+}
+
+/* --- Contact & Email Card --- */
+.footer__card--contact {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer__email-link {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    font-weight: var(--fw-bold);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast) var(--ease-out);
+}
+
+.footer__email-link:hover {
+    color: var(--color-accent);
+}
+
+.footer__star-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    opacity: 0.75;
+    transition: transform var(--transition-normal) var(--ease-out);
+}
+
+.footer__card--contact:hover .footer__star-icon {
+    transform: rotate(45deg) scale(1.1);
+}
+
+/* --- Ecosystem & Links Section --- */
+.footer__section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footer__section-title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-caption);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wider);
+    color: var(--color-text-muted);
+}
+
+.footer__links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer__links-list a {
+    font-family: var(--font-display);
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semibold);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast) var(--ease-out);
+}
+
+.footer__links-list a:hover {
+    color: var(--color-accent);
+}
+
+/* --- Copyright Bottom Line --- */
+.footer__copyright {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-sans);
+    font-size: var(--fs-caption);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-muted);
+    margin-top: auto;
+}
+
+.footer__copyright a {
+    color: var(--color-text-primary);
+    font-weight: var(--fw-semibold);
+}
+
+.footer__copyright a:hover {
+    color: var(--color-accent);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 640px) {
+    .footer__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer__card--contact {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}

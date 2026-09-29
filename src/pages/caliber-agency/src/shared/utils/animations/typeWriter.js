@@ -1,20 +1,25 @@
 export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
   const config = {
-    stagger: 25,
-    duration: 450,
-    easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-    offsetY: null,
+    stagger: options.stagger ?? 25,
+    duration: options.duration ?? 450,
+    easing: options.easing || "cubic-bezier(0.16, 1, 0.3, 1)",
+    offsetY: options.offsetY ?? null,
+    iconTarget: options.iconTarget !== undefined ? options.iconTarget : "img, svg",
+    flightDistance: options.flightDistance ?? null,
+    spaceWidth: options.spaceWidth || "0.28em",
     ...options
   };
 
   const triggers = typeof triggerTarget === "string" 
     ? document.querySelectorAll(triggerTarget)
-    : (triggerTarget instanceof NodeList ? triggerTarget : [triggerTarget]);
+    : (triggerTarget instanceof NodeList || Array.isArray(triggerTarget) ? triggerTarget : [triggerTarget]);
 
-  if (!triggers || triggers.length === 0) return;
+  if (!triggers || triggers.length === 0) return { destroy: () => {} };
+
+  const cleanups = [];
 
   triggers.forEach((trigger) => {
-    if (!trigger) return;
+    if (!trigger || !(trigger instanceof HTMLElement)) return;
 
     let nodeContent = trigger;
     if (contentTarget) {
@@ -24,6 +29,10 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
     }
 
     if (!nodeContent) return;
+
+    const rawContent = nodeContent.textContent || "";
+    const words = rawContent.trim().split(/\s+/).filter(Boolean);
+    if (words.length === 0) return;
 
     const computedStyle = window.getComputedStyle(nodeContent);
     const fontSize = parseFloat(computedStyle.fontSize) || 16;
@@ -36,91 +45,82 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
       ? config.offsetY 
       : Math.round(parseFloat(lineHeight) || fontSize * 1.3);
 
-    const rawContent = nodeContent.textContent || "";
-    const words = rawContent.trim().split(/\s+/).filter(Boolean);
-
-    if (words.length === 0) return;
-
     const isMultiWord = words.length > 1;
-    const cleanFontFamily = fontFamily.replace(/['"]/g, "").trim();
+    // Render clean character masks that naturally inherit CSS typography and colors
+    const renderChar = (char) => `<span class="char-mask" style="height:${lineHeight};"><span class="char-primary">${char}</span><span class="char-duplicate" style="transform:translate3d(0,${shiftY}px,0);">${char}</span></span>`;
 
-    // Use color: inherit so characters always dynamically respect CSS theme colors
-    const fontInheritStyle = `font-size:${fontSize}px;line-height:${lineHeight};font-weight:${fontWeight};letter-spacing:${letterSpacing};font-family:"${cleanFontFamily}",sans-serif;color:inherit;`;
-
-    // Helper: Render single character without whitespace between tags
-    const renderChar = (char) => `<span class="char-mask" style="display:inline-block;overflow:hidden;position:relative;vertical-align:top;height:${lineHeight};${fontInheritStyle}"><span class="char-primary" style="display:inline-block;transform:translate3d(0,0,0);opacity:1;${fontInheritStyle}">${char}</span><span class="char-duplicate" style="display:inline-block;position:absolute;left:0;top:0;transform:translate3d(0,${shiftY}px,0);opacity:0;${fontInheritStyle}">${char}</span></span>`;
-
-    // Render characters: zero whitespace for single-word, space separator for multi-word
     if (!isMultiWord) {
       nodeContent.innerHTML = [...words[0]].map(renderChar).join("");
     } else {
-      nodeContent.innerHTML = words.map((word) => [...word].map(renderChar).join("")).join(`<span class="char-space" style="display:inline-block;width:0.28em;"></span>`);
+      nodeContent.innerHTML = words.map((word) => [...word].map(renderChar).join("")).join(`<span class="char-space" style="width:${config.spaceWidth};"></span>`);
     }
 
     const masks = nodeContent.querySelectorAll(".char-mask");
 
-    // --- Arrow Kinetic Dual-Layer Mask with Theme-Aware Colors ---
-    const existingIcon = trigger.querySelector("img");
+    // Dynamic Companion Icon Roll-Through Setup
     let iconPrimary = null;
     let iconDuplicate = null;
-    let flightDistance = 22;
+    let computedFlight = config.flightDistance || 22;
 
-    if (existingIcon) {
-      let iconMask = existingIcon.parentElement;
-      if (!iconMask.classList.contains("icon-mask")) {
-        const rawW = parseFloat(existingIcon.getAttribute("width")) || 16;
-        const rawH = parseFloat(existingIcon.getAttribute("height")) || 16;
-        
-        const maskW = rawW + 8;
-        const maskH = rawH + 8;
-        flightDistance = Math.round(maskW * 1.15);
+    if (config.iconTarget) {
+      const existingIcon = trigger.querySelector(config.iconTarget);
+      if (existingIcon) {
+        let iconMask = existingIcon.parentElement;
+        if (!iconMask.classList.contains("icon-mask")) {
+          const rawW = parseFloat(existingIcon.getAttribute("width")) || existingIcon.clientWidth || 16;
+          const rawH = parseFloat(existingIcon.getAttribute("height")) || existingIcon.clientHeight || 16;
+          
+          const maskW = rawW + 8;
+          const maskH = rawH + 8;
+          computedFlight = config.flightDistance || Math.round(maskW * 1.15);
 
-        iconMask = document.createElement("span");
-        iconMask.className = "icon-mask";
-        iconMask.style.cssText = `
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          overflow: hidden;
-          width: ${maskW}px;
-          height: ${maskH}px;
-          vertical-align: middle;
-          flex-shrink: 0;
-        `;
+          iconMask = document.createElement("span");
+          iconMask.className = "icon-mask";
+          iconMask.style.cssText = `
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            width: ${maskW}px;
+            height: ${maskH}px;
+            vertical-align: middle;
+            flex-shrink: 0;
+          `;
 
-        iconPrimary = existingIcon.cloneNode(true);
-        iconPrimary.classList.add("icon-primary");
-        iconPrimary.style.cssText = `
-          display: block;
-          position: absolute;
-          width: ${rawW}px;
-          height: ${rawH}px;
-          transform: matrix(1, 0, 0, 1, 0, 0);
-          will-change: transform;
-        `;
+          iconPrimary = existingIcon.cloneNode(true);
+          iconPrimary.classList.add("icon-primary");
+          iconPrimary.style.cssText = `
+            display: block;
+            position: absolute;
+            width: ${rawW}px;
+            height: ${rawH}px;
+            transform: matrix(1, 0, 0, 1, 0, 0);
+            will-change: transform;
+          `;
 
-        iconDuplicate = existingIcon.cloneNode(true);
-        iconDuplicate.classList.add("icon-duplicate");
-        iconDuplicate.style.cssText = `
-          display: block;
-          position: absolute;
-          width: ${rawW}px;
-          height: ${rawH}px;
-          transform: matrix(1, 0, 0, 1, -${flightDistance}, ${flightDistance});
-          will-change: transform;
-        `;
+          iconDuplicate = existingIcon.cloneNode(true);
+          iconDuplicate.classList.add("icon-duplicate");
+          iconDuplicate.style.cssText = `
+            display: block;
+            position: absolute;
+            width: ${rawW}px;
+            height: ${rawH}px;
+            transform: matrix(1, 0, 0, 1, -${computedFlight}, ${computedFlight});
+            will-change: transform;
+          `;
 
-        iconMask.appendChild(iconPrimary);
-        iconMask.appendChild(iconDuplicate);
-        existingIcon.replaceWith(iconMask);
-      } else {
-        iconPrimary = iconMask.querySelector(".icon-primary");
-        iconDuplicate = iconMask.querySelector(".icon-duplicate");
+          iconMask.appendChild(iconPrimary);
+          iconMask.appendChild(iconDuplicate);
+          existingIcon.replaceWith(iconMask);
+        } else {
+          iconPrimary = iconMask.querySelector(".icon-primary");
+          iconDuplicate = iconMask.querySelector(".icon-duplicate");
+        }
       }
     }
 
-    // Phase 1: Mouse Enter
+    // Phase 1: Enter / Active
     const onEnter = () => {
       masks.forEach((mask, index) => {
         const primary = mask.querySelector(".char-primary");
@@ -150,14 +150,14 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
         iconPrimary.animate(
           [
             { transform: "matrix(1, 0, 0, 1, 0, 0)" },
-            { transform: `matrix(1, 0, 0, 1, ${flightDistance}, -${flightDistance})` }
+            { transform: `matrix(1, 0, 0, 1, ${computedFlight}, -${computedFlight})` }
           ],
           { duration: config.duration, easing: config.easing, fill: "forwards" }
         );
 
         iconDuplicate.animate(
           [
-            { transform: `matrix(1, 0, 0, 1, -${flightDistance}, ${flightDistance})` },
+            { transform: `matrix(1, 0, 0, 1, -${computedFlight}, ${computedFlight})` },
             { transform: "matrix(1, 0, 0, 1, 0, 0)" }
           ],
           { duration: config.duration, easing: config.easing, fill: "forwards" }
@@ -165,7 +165,7 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
       }
     };
 
-    // Phase 2: Mouse Leave
+    // Phase 2: Leave / Return
     const onLeave = () => {
       masks.forEach((mask, index) => {
         const primary = mask.querySelector(".char-primary");
@@ -175,16 +175,16 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
         if (primary && duplicate) {
           primary.animate(
             [
-              { transform: `translate3d(0, 0, 0)`, opacity: 0 },
-              { transform: `translate3d(0, -${shiftY}px, 0)`, opacity: 0 }
+              { transform: `translate3d(0, -${shiftY}px, 0)`, opacity: 0 },
+              { transform: "translate3d(0, 0, 0)", opacity: 1 }
             ],
             { duration: config.duration, delay, easing: config.easing, fill: "forwards" }
           );
 
           duplicate.animate(
             [
-              { transform: `translate3d(0, -${shiftY}px, 0)`, opacity: 0 },
-              { transform: `translate3d(0, 0, 0)`, opacity: 1 }
+              { transform: `translate3d(0, 0, 0)`, opacity: 1 },
+              { transform: `translate3d(0, ${shiftY}px, 0)`, opacity: 0 }
             ],
             { duration: config.duration, delay, easing: config.easing, fill: "forwards" }
           );
@@ -195,14 +195,14 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
         iconDuplicate.animate(
           [
             { transform: "matrix(1, 0, 0, 1, 0, 0)" },
-            { transform: `matrix(1, 0, 0, 1, ${flightDistance}, -${flightDistance})` }
+            { transform: `matrix(1, 0, 0, 1, ${computedFlight}, -${computedFlight})` }
           ],
           { duration: config.duration, easing: config.easing, fill: "forwards" }
         );
 
         iconPrimary.animate(
           [
-            { transform: `matrix(1, 0, 0, 1, -${flightDistance}, ${flightDistance})` },
+            { transform: `matrix(1, 0, 0, 1, -${computedFlight}, ${computedFlight})` },
             { transform: "matrix(1, 0, 0, 1, 0, 0)" }
           ],
           { duration: config.duration, easing: config.easing, fill: "forwards" }
@@ -212,5 +212,14 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
 
     trigger.addEventListener("mouseenter", onEnter);
     trigger.addEventListener("mouseleave", onLeave);
+
+    cleanups.push(() => {
+      trigger.removeEventListener("mouseenter", onEnter);
+      trigger.removeEventListener("mouseleave", onLeave);
+    });
   });
+
+  return {
+    destroy: () => cleanups.forEach((fn) => fn())
+  };
 }
