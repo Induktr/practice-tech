@@ -1,5 +1,4 @@
 import { SOLANA_RPC_ENDPOINT, TEST_PUBKEYS } from "./constants/rpc-endpoint.js";
-import accountInfo from "./account.json" with { type: "json" };
 
 export const accountStorage = Object.create(null);
 
@@ -81,33 +80,42 @@ export function registerAccount(storage, account) {
   if (!storage || !account) return null;
 
   if (Array.isArray(account)) {
-    const registered = [];
-    for (const item of account) {
-      if (item?.pubKey) {
-        if (item.executable === true) Object.freeze(item);
-        storage[item.pubKey] = item;
-        registered.push(structuredClone(item));
-      }
-    }
-    return registered;
+    return account.map(item => registerAccount(storage, item)).filter(Boolean);
   }
 
   if (!account.pubKey) return null;
-  if (account.executable === true) Object.freeze(account);
+
+  if (account.executable === true) {
+    Object.freeze(account);
+  }
 
   storage[account.pubKey] = account;
-  return structuredClone(account);
+
+  const snapshot = structuredClone(account);
+
+  if (account.executable === true) {
+    Object.freeze(snapshot);
+  }
+
+  return snapshot;
 }
 
 export function getAccountSnapshot(storage, pubKey) {
-  if(!storage || typeof storage !== "object" || !pubKey) return null;
+  if (!storage || typeof storage !== "object" || typeof pubKey !== "string") {
+    return null;
+  }
 
   const targetAccount = storage[pubKey];
+  if (!targetAccount) return null;
 
-  if(!targetAccount) return null;
+  const snapshot = structuredClone(targetAccount);
 
-  return structuredClone(targetAccount);
-};
+  if (targetAccount.executable === true) {
+    Object.freeze(snapshot);
+  }
+
+  return snapshot;
+}
 
 export function calcProgramTvl(storage, ownerProgram) {
   if (!storage || typeof storage !== "object" || !ownerProgram || typeof ownerProgram !== "string") return null;
@@ -127,34 +135,3 @@ export function calcProgramTvl(storage, ownerProgram) {
 
   return totalTvl;
 }
-
-const targetProgram = accountsData[0]?.owner;
-
-console.log(registerAccount(accountStorage, accountsData))
-
-// const snapshot = getAccountSnapshot(accountStorage);
-const tvlVolume = calcProgramTvl(accountStorage, targetProgram);
-
-// TEST Base
-
-Object.prototype.props = "HELLO!";
-
-const isNullPrototype = accountStorage.props === undefined &&
-accountStorage["toString"] === undefined &&
-accountStorage["hasOwnProperty"] === undefined &&
-accountStorage.constructor === undefined
-
-accountsData[0].lamports - 30
-
-// console.log("Снапшот аккаунта:", snapshot);
-console.log("Общий обьём TVL:", tvlVolume);
-console.log("Стерильный обьект:", isNullPrototype);
-console.log("Отсутствие отрицательного баланса:", accountsData[0].lamports);
-
-// 1. Проверить обьекты на наличие прототипов.
-// 2. Проверить глубокую копию вложеных структур.
-// 3. Проверить безопасность типов при не правльной передаче.
-// 4. Проверить мутацию ключей в обьекте с нулевым прототипом.
-// 5. Проверить наличие мутации при выходе данных для UI.
-// 6. Проверить разные способы манипуляции обьектами в безопасном ключе.
-// 7. Убедиться в том что все ключи при включении иетратора они не оставляют не следа прототипов от самого обьекта, чтобы при рантайме злоумышенник не смог проникнуть в этот цыкл и сделать изменения в нём.
