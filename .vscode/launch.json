@@ -8,7 +8,7 @@
             "name": "Launch Chrome",
             "request": "launch",
             "type": "chrome",
-            "url": "${workspaceFolder}/src/pages/mdn/mdn_gen.html",
+            "url": "${workspaceFolder}/src/pages/animations/index.html",
             "webRoot": "${workspaceFolder}",
         }
     ]

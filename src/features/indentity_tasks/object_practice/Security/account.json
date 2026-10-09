@@ -1,0 +1,11 @@
+[
+  {
+    "pubKey": "11111111111111111111111111111111",
+    "lamports": "1.0",
+    "owner": "Induktr",
+    "executable": true,
+    "data": {
+      "gas": "0.0005231231"
+    }
+  }
+]

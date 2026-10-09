@@ -1,0 +1,5 @@
+export const SOLANA_RPC_ENDPOINT = "https://api.devnet.solana.com";
+export const TEST_PUBKEYS = [
+  "11111111111111111111111111111111",
+  "Vote111111111111111111111111111111111111111"
+];

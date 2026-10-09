@@ -19,20 +19,14 @@ export function createThemeManager(options = {}) {
   };
 
   const getStoredTheme = () => {
-    try {
-      return localStorage.getItem(config.storageKey);
-    } catch {
-      return null;
-    }
+    return Promise.try(() => localStorage.getItem(config.storageKey));
   };
 
   const updateUI = (theme) => {
     root.setAttribute(config.attribute, theme);
     root.setAttribute("color-scheme", theme);
 
-    try {
-      localStorage.setItem(config.storageKey, theme);
-    } catch {}
+    Promise.try(() => localStorage.setItem(config.storageKey, theme));
 
     // Update icons in any attached trigger elements
     const triggers = typeof config.triggerSelector === "string"

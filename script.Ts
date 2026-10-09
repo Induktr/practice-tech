@@ -1,3 +1,6 @@
+
+// Object Practice
+
 const MNData = {
   countNodes: 10,
   toString: (content: string = "Nikita", coor: { x: number, y: number } = {x: 10,y: 20}) => {

@@ -1,0 +1,16 @@
+[
+  "account1": {
+    "lamports": 1,
+    "owner": "Induktr",
+    "executable": false,
+    "data": {
+      "gas": 0.00321991
+    }
+  },
+  "lamports": 1,
+  "owner": "Induktr",
+  "executable": false,
+  "data": {
+    "gas": 0.00321991
+  }
+]

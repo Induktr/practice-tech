@@ -1,3 +1,4 @@
+import * as v from "valibot";
 import Image from "next/image";
 import { Header } from "@/widgets/Header/Header";
 import { Button } from "@/shared/ui/button";
@@ -22,6 +23,18 @@ import {
 } from "@/shared/constants/services/data";
 import { Textarea } from "@/shared/ui/textarea";
 import { cn } from "@/shared/lib/utils";
+
+type InputGeneration = {
+  generateId: "sound" | "image" | "tts";
+  prompt: string;
+  optoins: Record<string, string>;
+};
+
+export const InputGenerationSchema = v.object({
+  generateId: v.enum({}),
+  prompt: v.string(),
+  options: v.record(v.string(), v.string())
+});
 
 export default function Home() {
   return (
@@ -131,16 +144,18 @@ export default function Home() {
               </article>
             </div>
           </div>
-          <AnnBanner className="">
-            <div className="">
-              {BANNER_FEATURES.map((feature, index) => (
-                <p key={index}>{feature}</p>
-              ))}
+          <AnnBanner className="flex flex-row justify-center items-center p-7 w-full">
+            <div className="flex h-auto max-w-20 overflow-hidden">
+              <div className="flex flex-row items-center space-y-3 gap-3">
+                {BANNER_FEATURES.map((feature, index) => (
+                  <p key={index}>{feature}</p>
+                ))}
+              </div>
             </div>
-            <div className="">
+            <div className="flex flex-col">
               <h1>Try Music</h1>
               <span className="">V2</span>
-              <div className="">
+              <div className="space-y-3 max-h-20 overflow-y-hidden">
                 {MUSIC_BANNER_EXAMPLES.map((example) => (
                   <div key={example.id} className="">
                     <Image
