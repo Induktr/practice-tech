@@ -1,6 +1,6 @@
 [config]
-model = "anthropic/claude-3-5-sonnet-20241022"
-fallback_models = ["anthropic/claude-3-5-haiku-20241022", "anthropic/claude-3-haiku-20240307"]
+model = "anthropic/claude-fable-5-2"
+fallback_models = ["anthropic/claude-sonnet-5-5", "anthropic/claude-haiku-5-5"]
 response_language = "en"
 
 [github_action_config]
