@@ -1,6 +1,6 @@
 [config]
-model = "anthropic/claude-fable-5-2"
-fallback_models = ["anthropic/claude-sonnet-5-5", "anthropic/claude-haiku-5-5"]
+model = "anthropic/claude-haiku-5-5"
+fallback_models = ["anthropic/claude-sonnet-5-5", "anthropic/claude-fable-5-2"]
 reasoning_effort = "none"
 response_language = "en-EN"
 
