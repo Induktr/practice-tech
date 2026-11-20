@@ -219,3 +219,5 @@ step(divEl, DEFAULT_COOR);
 //     }
 //   })
 // })
+
+// TODO: Add Drag & Drop functionality for animations vector with interaction user.
