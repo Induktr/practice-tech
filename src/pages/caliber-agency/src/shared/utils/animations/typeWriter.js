@@ -35,7 +35,7 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
     if (words.length === 0) return;
 
     const computedStyle = window.getComputedStyle(nodeContent);
-    const fontSize = parseFloat(computedStyle.fontSize) || 16;
+    const fontSize = Number.parseFloat(computedStyle.fontSize) || 16;
     const lineHeight = computedStyle.lineHeight !== "normal" ? computedStyle.lineHeight : `${fontSize * 1.2}px`;
     const fontWeight = computedStyle.fontWeight;
     const letterSpacing = computedStyle.letterSpacing;
@@ -43,7 +43,7 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
 
     const shiftY = config.offsetY !== null 
       ? config.offsetY 
-      : Math.round(parseFloat(lineHeight) || fontSize * 1.3);
+      : Math.round(Number.parseFloat(lineHeight) || fontSize * 1.3);
 
     const isMultiWord = words.length > 1;
     // Render clean character masks that naturally inherit CSS typography and colors
@@ -67,8 +67,8 @@ export function typeWriter(triggerTarget, contentTarget = null, options = {}) {
       if (existingIcon) {
         let iconMask = existingIcon.parentElement;
         if (!iconMask.classList.contains("icon-mask")) {
-          const rawW = parseFloat(existingIcon.getAttribute("width")) || existingIcon.clientWidth || 16;
-          const rawH = parseFloat(existingIcon.getAttribute("height")) || existingIcon.clientHeight || 16;
+          const rawW = Number.parseFloat(existingIcon.getAttribute("width")) || existingIcon.clientWidth || 16;
+          const rawH = Number.parseFloat(existingIcon.getAttribute("height")) || existingIcon.clientHeight || 16;
           
           const maskW = rawW + 8;
           const maskH = rawH + 8;

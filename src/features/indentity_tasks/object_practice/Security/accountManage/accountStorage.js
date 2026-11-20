@@ -5,6 +5,8 @@ export const accountStorage = Object.create(null);
 export async function fetchAccounts(pubKeys = TEST_PUBKEYS, rpcUrl = SOLANA_RPC_ENDPOINT) {
   if (!Array.isArray(pubKeys) || pubKeys.length === 0) return null;
 
+  const controller = new AbortController();
+
   const response = await fetch(rpcUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -14,14 +16,20 @@ export async function fetchAccounts(pubKeys = TEST_PUBKEYS, rpcUrl = SOLANA_RPC_
       method: "getMultipleAccounts",
       params: [pubKeys, { encoding: "jsonParsed" }]
     })
-  });
+  }, { signal: controller.signal });
 
-  if(!response.ok) return null
+  if(!response.ok) {
+    controller.abort()
+    return null
+  }
 
   const json = await response.json();
   const rawList = json?.result?.value;
 
-  if (!Array.isArray(rawList)) return null;
+  if (!Array.isArray(rawList)) { 
+    controller.abort()
+    return null
+  };
 
   return rawList.map((info, index) => ({
     pubKey: pubKeys[index],

@@ -1,0 +1,65 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+model Voice {
+    id                  String   @id @default(uuid())
+    name                String
+    modelId            String @map("model_id")
+    description         String?
+    stability           Float
+    similarityBoost    Float @map("similarity_boost")
+    permissions         String[]
+    category            String
+    fineTuningRequest String @map("fine_tuning_request")
+    publicDomain       Boolean @map("public_domain")
+
+    @@map("voice")
+}
+
+model Project {
+    id                  String   @id @default(uuid())
+    name                String
+    description         String?
+    stability           Float
+    similarityBoost    Float @map("similarity_boost")
+    permissions         String[]
+    category            String
+    fineTuningRequest String @map("fine_tuning_request")
+    publicDomain       Boolean @map("public_domain")
+
+    @@map("project")
+}
+
+model Text {
+    id                  String   @id @default(uuid())
+    name                String
+    description         String?
+    stability           Float
+    similarityBoost    Float @map("similarity_boost")
+    permissions         String[]
+    category            String
+    fineTuningRequest String @map("fine_tuning_request")
+    publicDomain       Boolean @map("public_domain")
+
+    @@map("text")
+}
+
+model Audio {
+    id                  String   @id @default(uuid())
+    name                String
+    description         String?
+    stability           Float
+    similarityBoost    Float @map("similarity_boost")
+    permissions         String[]
+    category            String
+    fineTuningRequest String @map("fine_tuning_request")
+    publicDomain       Boolean @map("public_domain")
+
+    @@map("audio")
+}

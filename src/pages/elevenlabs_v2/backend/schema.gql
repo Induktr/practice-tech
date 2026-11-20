@@ -1,0 +1,65 @@
+scalar Upload
+
+type DownloadResult {
+  url: String!
+  success: Boolean!
+}
+
+type Voice {
+  id: String!
+  name: String!
+  description: String!
+  age: String!
+  gender: String!
+  language: String!
+  category: String!
+  previewUrl: String!
+}
+
+type Project {
+  id: String!
+  name: String!
+  description: String!
+  language: String!
+  category: String!
+  previewUrl: String!
+}
+
+type Text {
+  id: String!
+  title: String!
+  text: String!
+  language: String!
+  category: String!
+  projectId: String!
+  voiceId: String!
+}
+
+type Audio {
+  id: String!
+  textId: String!
+  url: String!
+}
+
+type Query {
+  health: String!
+  fetchVoices: [Voice!]!
+  fetchProjects: [Project!]!
+  fetchTexts: [Text!]!
+  fetchAudios: [Audio!]!
+}
+
+type Mutation {
+  addVoice(voice: Voice!): Voice!
+  addProject(project: Project!): Project!
+  addText(text: Text!): Text!
+  addAudio(audio: Audio!): Audio!
+  updateProject(id: String!, project: Project!): Project!
+  updateText(id: String!, text: Text!): Text!
+  updateAudio(id: String!, audio: Audio!): Audio!
+  deleteVoice(id: String!): Voice!
+  deleteProject(id: String!): Project!
+  deleteText(id: String!): Text!
+  deleteAudio(id: String!): Audio!
+  generateSpeech(text: String!, voiceId: String!, projectId: String!): DownloadResult!
+}

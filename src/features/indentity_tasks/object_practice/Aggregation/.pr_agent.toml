@@ -1,0 +1,8 @@
+[config]
+model = "anthropic/claude-fable-5-1"
+fallback_models = ["anthropic/claude-sonnet-5-5", "anthropic/claude-haiku-5-5"]
+reasoning_effort = "none"
+response_language = "en-EN"
+
+[pr-reviwer]
+extra-instructions = "Wrtie & speaking only english. Adhere to development standards, including compliance with all concepts in web technologies and beyond, to find the right solutions for various scenarios, and also apply first principles to identify the root cause of a problem."

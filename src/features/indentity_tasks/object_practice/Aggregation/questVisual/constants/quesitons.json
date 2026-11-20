@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "question": "What is correct typing object on TypeScript?",
+    "options": ["const", "let", "var", "void"],
+    "correctAnswer": 0,
+    "invalidAnswer": 0
+  },
+  {
+    "id": 2,
+    "question": "Why Event Loop is Important in JavaScript?",
+    "options": ["const", "let", "var", "void"],
+    "correctAnswer": 0,
+    "invalidAnswer": 0
+  }
+]
